@@ -350,6 +350,61 @@
                     </div>
                 </div>
                 <!-- END OF GUILD TABS -->
+                <!-- START OF PLAYTIME TAB -->
+                <div data-id="3" class="type_content type_content_playtime" style="display: none;">
+                    <div class="header">
+                        <div id="column"><a href="javascript:void(0);"
+                                            class="Playtime_button active">Playtime</a>
+                            <div id="tab_dot"></div>
+                        </div>
+                    </div>
+                    <div class="body">
+
+                        <div class="Playtime_content">
+                            {if $realm.playtime}
+                                <div class="table-responsive text-nowrap">
+                                    <table class="nice_table mb-1">
+                                        <thead></thead>
+                                        {foreach from=$realm.playtime item=character}
+                                            <tr>
+                                                <td class="col-1">
+                                                    {if $character.rank == 1 || $character.rank == 2 || $character.rank == 3}
+                                                        <img width="16px" height="16px"
+                                                             src="{$url}application/modules/sidebox_top/images/{$character.rank}.ico"/>
+                                                    {/if}
+                                                </td>
+                                                <td class="col-1 stats_name">
+                                                    <img src="{$url}application/images/stats/{$character.race}-{$character.gender}.gif"
+                                                         width="20px">
+                                                    <img src="{$url}application/images/stats/{$character.class}.gif"
+                                                         width="20px">
+                                                </td>
+
+                                                <td class="col-3">
+                                                    <a href="{$url}character/{$realm.id}/{$character.guid}/"
+                                                       data-character-tip="{$character.guid}" data-realm="{$realm.id}">
+                                                        {$character.name}
+                                                    </a>
+                                                </td>
+
+                                                <td class="col-4">
+                                                    {$character.guild}
+                                                </td>
+
+                                                <td class="col-5 user-points">
+                                                      {$this->seconds_in_redable($character.totaltime)}</td>
+                                            </tr>
+                                        {/foreach}
+                                    </table>
+                                </div>
+                            {else}
+                                <div class="center">{lang('no_players', 'sidebox_top')}</div>
+                            {/if}
+                        </div>
+
+                    </div>
+                </div>
+                <!-- END OF PLAYTIME TAB -->
             </div>
             <!-- END OF REALM TAB -->
 
@@ -360,10 +415,15 @@
         <div id="top10_types_menu">
             <a href="javascript:void(0);" id="type_button_0" onClick="Top.toggleType(0);"
                class="col-xs-12 col-sm-12 col-md-12 col-lg-3 nice_button active">PVP</a>
+
             <a href="javascript:void(0);" id="type_button_1" onClick="Top.toggleType(1);"
                class="col-xs-12 col-sm-12 col-md-12 col-lg-3 nice_button">ACHIEVEMENT</a>
+
             <a href="javascript:void(0);" id="type_button_2" onClick="Top.toggleType(2);"
                class="col-xs-12 col-sm-12 col-md-12 col-lg-3 nice_button">GUILD</a>
+
+            <a href="javascript:void(0);" id="type_button_3" onClick="Top.toggleType(3);"
+                class="col-xs-12 col-sm-12 col-md-12 col-lg-4 nice_button">PLAYTIME</a>
         </div>
 
         <div id="top10_realms_menu">

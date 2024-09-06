@@ -29,7 +29,8 @@ class Top extends MX_Controller
                 'selected_realm' => 1,
                 'url' => $this->template->page_url,
                 'realms' => $this->getData(),
-                'load_css' => 'application/modules/sidebox_top/css/sidebox_top.css'
+                'load_css' => 'application/modules/sidebox_top/css/sidebox_top.css',
+                'this' => $this
             );
 
             $output = $this->template->loadPage("sidebox_top.tpl", $data);
@@ -64,10 +65,60 @@ class Top extends MX_Controller
                 $data[$realm->getId()]['achivements'] = $this->top_model->getTopAchievementPlayers($limit);
 
                 $data[$realm->getId()]['guilds'] = $this->top_model->getTopGuild($limit);
+
+                $data[$realm->getId()]['playtime'] = $this->top_model->getTopCharactersPlayTime($limit);
             }
 
             return $data;
         }
+    }
+
+    public function seconds_in_redable( $inputSeconds ) {
+        if ( $inputSeconds ) {
+            $secondsInAMinute = 60;
+            $secondsInAnHour  = 60 * $secondsInAMinute;
+            $secondsInADay    = 24 * $secondsInAnHour;
+            $secondsInAMonth = 30 * $secondsInADay;
+            $secondsInAYear = 12 * $secondsInAMonth;
+
+            $years = floor( $inputSeconds / $secondsInAYear );
+
+            $monthSeconds = $inputSeconds % $secondsInAYear;
+            $months = floor( $monthSeconds / $secondsInAMonth );
+
+            $daySeconds = $monthSeconds % $secondsInAMonth;
+            $days = floor( $daySeconds / $secondsInADay );
+
+            $hourSeconds = $daySeconds % $secondsInADay;
+            $hours = floor( $hourSeconds / $secondsInAnHour );
+
+            $minuteSeconds = $hourSeconds % $secondsInAnHour;
+            $minutes = floor( $minuteSeconds / $secondsInAMinute );
+
+            $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+            $seconds = ceil( $remainingSeconds );
+
+            $sections = array(
+                'year' => ( int ) $years,
+                'month' => ( int ) $months,
+                'day' => ( int ) $days,
+                'hour' => ( int ) $hours,
+                'minute' => ( int ) $minutes,
+                'second' => ( int ) $seconds
+            );
+
+            foreach ( $sections as $name => $value ) {
+                if ( $value > 0 ) {
+                    $timeParts[] = $value. ' '.$name.( $value == 1 ? '' : 's' );
+                }
+            }
+        } else {
+            $timeParts = 0 ;
+
+            return  $timeParts;
+        }
+
+        return implode( ', ', $timeParts );
     }
 
 
